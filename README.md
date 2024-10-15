@@ -1,7 +1,5 @@
 # Open Redirect Vulnerability Scanner
 
-![Banner]([https://placehold.co/600x200?text=Open+Redirect+Scanner](https://images.ctfassets.net/nx13ojx82pll/LKTlLBkx5j2IwFf5JR8ek/20403c97542d1860cd3aa813040a3638/react-open-redirect-guide-examples-and-prevention-pic-3.png?w=1566&h=878&q=80&fm=png))
-
 ## Description
 
 **Open Redirect Vulnerability Scanner** est un script Python interactif permettant de scanner un ou plusieurs domaines pour détecter des vulnérabilités de type open redirect.
