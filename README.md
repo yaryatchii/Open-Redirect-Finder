@@ -35,11 +35,11 @@ go install github.com/tomnomnom/qsreplace@latest
 ## Installation
 Clonez le dépôt sur votre machine locale :
 ```bash
-git clone https://github.com/yaryatchi/open-redirect-scanner.git
+git clone https://github.com/yaryatchii/Open-Redirect-Finder.git
 ```
 ## Accédez au dossier du projet :
 ```bash
-cd open-redirect-scanner
+cd Open-Redirect-Finder
 ```
 
 ## Utilisation
