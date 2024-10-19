@@ -1,5 +1,6 @@
 import os
 import subprocess
+import urllib.parse
 
 # Couleurs pour le terminal
 RED = "\033[0;31m"
@@ -25,17 +26,35 @@ Y88b. .d88P d8b 888  T88b  d8b   Y888P  d8b Y88b  d88P
     {RESET}@yaryatchi - github.com/yaryatchii
     """)
 
+# Fonction alternative à qsreplace pour remplacer les paramètres URL
+def replace_url_param(url, new_value):
+    parsed_url = urllib.parse.urlparse(url)
+    query = urllib.parse.parse_qs(parsed_url.query)
+    
+    # Remplacer tous les paramètres ayant une URL par new_value
+    for param in query:
+        if 'http' in query[param][0]:
+            query[param] = [new_value]
+    
+    new_query = urllib.parse.urlencode(query, doseq=True)
+    new_url = urllib.parse.urlunparse(parsed_url._replace(query=new_query))
+    
+    return new_url
+
 def scan_domain(domain):
     print(f"{YELLOW}Scanning {domain} for open redirect vulnerabilities...{RESET}")
     try:
-        # Exécuter la commande pour chercher les redirections ouvertes
-        result = subprocess.getoutput(
-            f"waybackurls {domain} | grep -a -i =http | qsreplace 'http://evil.com' | while read host; do curl -s -L $host -I | grep 'evil.com' && echo \"$host {RED}is Vulnerable{RESET}\"; done"
-        )
-        if result:
-            print(result)
-        else:
-            print(f"{RED}No open redirect vulnerabilities found on {domain}.{RESET}")
+        # Récupérer les URL via waybackurls
+        urls = subprocess.getoutput(f"waybackurls {domain} | grep -a -i =http").splitlines()
+        
+        # Remplacer les URLs dans les paramètres avec 'http://evil.com'
+        for url in urls:
+            modified_url = replace_url_param(url, 'http://evil.com')
+            result = subprocess.getoutput(f"curl -s -L {modified_url} -I | grep 'evil.com'")
+            if result:
+                print(f"{modified_url} {RED}is Vulnerable{RESET}")
+            else:
+                print(f"{modified_url} {GREEN}is Not Vulnerable{RESET}")
     except Exception as e:
         print(f"{RED}An error occurred: {e}{RESET}")
 
